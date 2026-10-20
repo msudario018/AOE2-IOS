@@ -9,6 +9,7 @@
 #include <cstdio>
 #include <cstdarg>
 #include <ctime>
+#include <pthread.h>
 
 static char s_logDirectory[1024] = {0};
 static char s_runtimeLogPath[1024] = {0};
