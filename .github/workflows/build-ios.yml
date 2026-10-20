@@ -85,7 +85,7 @@ jobs:
             TAG="${{ github.ref_name }}"
           fi
           if [ "$TAG" = "main" ] || [ "$TAG" = "master" ] || [ -z "$TAG" ]; then
-            TAG="v1.0.1-ios"
+            TAG="v1.0.2-ios"
           fi
           echo "RELEASE_TAG=$TAG" >> "$GITHUB_ENV"
           echo "Release tag: $TAG"
@@ -100,7 +100,9 @@ jobs:
 
           Turnkey compiled iOS IPA for **Age of Empires II (1999)**, **The Conquerors Expansion (2000)**, and **HD Edition (2013)**.
 
-          #### What's New in v1.0.1:
+          #### What's New in v1.0.2:
+          - **UI Layout & Cutoff Fix**: Completely redesigned `DocumentPickerView` ("Game Data Required" screen) into a responsive side-by-side landscape layout inside a safe-area bounded `UIScrollView`. Buttons and cards are no longer pushed off-screen or cut off on iPhones and iPads.
+          - **Interactive Import Spinner**: Real-time loading indicator and status messages during file selection and extraction.
           - **Medieval Royal App Icon**: Integrated 1024x1024 high-resolution App Icon set into the native iOS asset catalog (`AppIcon.appiconset`).
           - **HD Edition Directory Support**: `GameFileManager.swift` now automatically detects `AoK HD.exe` and HD edition resource tree (`resources/_common/dat`).
           - **120Hz ProMotion Metal Viewport**: Triple-buffered Metal pipeline with nearest-neighbor crisp retro scaling, bilinear filtering, and CRT scanlines.
@@ -112,7 +114,7 @@ jobs:
           #### Installation & Sideloading
           1. Download **`AoE2-unsigned.ipa`** or **`AoE2.ipa`** attached below.
           2. Sideload onto your iPhone or iPad using **Feather**, **SideStore**, **AltStore**, **Sideloadly**, or **TrollStore**.
-          3. Connect device to your PC/Mac, open **Files / iTunes File Sharing**, and drop your original PC **Age of Empires II** game folder into the app's `Documents` directory.
+          3. Tap **📂 Select Game Folder / ZIP** in the app to directly pick your game files, or drop your original PC **Age of Empires II** game folder into the app's `Documents` directory via iTunes / Finder / Files app.
           4. Launch the app and play!
           EOF
 
