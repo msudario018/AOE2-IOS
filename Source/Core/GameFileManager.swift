@@ -16,18 +16,23 @@ public class GameFileManager {
     
     public static let shared = GameFileManager()
     
-    // Key game executables and data archives for Age of Empires II (1999) & The Conquerors Expansion (2000)
+    // Key game executables and data archives for Age of Empires II (1999, 2000 The Conquerors, and 2013 HD Edition)
     public static let candidateExecutables = [
         "EMPIRES2.EXE",
         "empires2.exe",
         "AGE2_X1.EXE",
         "age2_x1.exe",
+        "AoK HD.exe",
+        "AoK_HD.exe",
+        "Launcher.exe",
         "AoE2.exe"
     ]
     
     public static let criticalDataFiles = [
         "data/empires2.dat",
-        "data/age2_x1.dat"
+        "data/age2_x1.dat",
+        "resources/_common/dat/empires2_x1_p1.dat",
+        "resources/_common/dat/empires2_x2_p1.dat"
     ]
     
     public static let diskImageNames = [
