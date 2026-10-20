@@ -29,8 +29,8 @@ targets:
         ENABLE_BITCODE: NO
         ASSETCATALOG_COMPILER_APPICON_NAME: ""
     dependencies:
-      - framework: Metal.framework
-      - framework: MetalKit.framework
-      - framework: QuartzCore.framework
-      - framework: UIKit.framework
-      - framework: AudioToolbox.framework
+      - sdk: Metal.framework
+      - sdk: MetalKit.framework
+      - sdk: QuartzCore.framework
+      - sdk: UIKit.framework
+      - sdk: AudioToolbox.framework

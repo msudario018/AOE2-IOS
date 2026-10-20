@@ -1,7 +1,9 @@
 #ifndef EmulationBridge_h
 #define EmulationBridge_h
 
+#if defined(__OBJC__)
 #import <Foundation/Foundation.h>
+#endif
 #include <stdint.h>
 #include <stdbool.h>
 
@@ -62,6 +64,7 @@ void EmulationBridge_SendKeyEvent(uint16_t scanCode, bool isDown);
 }
 #endif
 
+#if defined(__OBJC__)
 // MARK: - Objective-C Wrapper Class for Swift Interoperability
 
 NS_ASSUME_NONNULL_BEGIN
@@ -88,5 +91,6 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 NS_ASSUME_NONNULL_END
+#endif
 
 #endif /* EmulationBridge_h */
