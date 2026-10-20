@@ -233,6 +233,11 @@ void AoE2_Log(const char* level, const char* category, const char* format, ...) 
     CrashReporter_RecordBreadcrumb(category, messageBuffer);
 }
 
+void AoE2_LogMsg(const char* level, const char* category, const char* message) {
+    if (!message) return;
+    AoE2_Log(level, category, "%s", message);
+}
+
 } // extern "C"
 
 // MARK: - Objective-C Implementation

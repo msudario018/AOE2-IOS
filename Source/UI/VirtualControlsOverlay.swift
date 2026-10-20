@@ -96,11 +96,23 @@ public class VirtualControlsOverlay: UIView {
     }
     
     private func formatHUDButton(_ btn: UIButton, action: Selector) {
-        btn.titleLabel?.font = UIFont.systemFont(ofSize: 13, weight: .semibold)
-        btn.setTitleColor(.white, for: .normal)
+        if #available(iOS 15.0, *) {
+            var config = UIButton.Configuration.plain()
+            config.contentInsets = NSDirectionalEdgeInsets(top: 6, leading: 10, bottom: 6, trailing: 10)
+            config.baseForegroundColor = .white
+            config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
+                var outgoing = incoming
+                outgoing.font = UIFont.systemFont(ofSize: 13, weight: .semibold)
+                return outgoing
+            }
+            btn.configuration = config
+        } else {
+            btn.titleLabel?.font = UIFont.systemFont(ofSize: 13, weight: .semibold)
+            btn.setTitleColor(.white, for: .normal)
+            btn.contentEdgeInsets = UIEdgeInsets(top: 6, left: 10, bottom: 6, right: 10)
+        }
         btn.backgroundColor = UIColor(white: 1.0, alpha: 0.12)
         btn.layer.cornerRadius = 14.0
-        btn.contentEdgeInsets = UIEdgeInsets(top: 6, left: 10, bottom: 6, right: 10)
         btn.addTarget(self, action: action, for: .touchUpInside)
     }
     

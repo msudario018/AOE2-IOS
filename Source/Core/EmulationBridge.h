@@ -75,10 +75,10 @@ void EmulationBridge_SendKeyEvent(uint16_t scanCode, bool isDown);
 - (void)resume;
 - (void)shutdown;
 
-- (void)sendMouseMoveToX:(int)x y:(int)y;
-- (void)sendMouseButton:(int)button isDown:(BOOL)isDown;
-- (void)sendMouseScrollDeltaX:(int)deltaX deltaY:(int)deltaY;
-- (void)sendKeyEvent:(uint16_t)scanCode isDown:(BOOL)isDown;
+- (void)sendMouseMoveToX:(int)x y:(int)y NS_SWIFT_NAME(sendMouseMove(x:y:));
+- (void)sendMouseButton:(int)button isDown:(BOOL)isDown NS_SWIFT_NAME(sendMouseButton(button:isDown:));
+- (void)sendMouseScrollDeltaX:(int)deltaX deltaY:(int)deltaY NS_SWIFT_NAME(sendMouseScroll(deltaX:deltaY:));
+- (void)sendKeyEvent:(uint16_t)scanCode isDown:(BOOL)isDown NS_SWIFT_NAME(sendKeyEvent(scanCode:isDown:));
 
 @property (nonatomic, copy, nullable) void (^onFramebufferAvailable)(int width, int height, int pitch, const void *pixels);
 @property (nonatomic, copy, nullable) void (^onAudioAvailable)(const int16_t *samples, int count);

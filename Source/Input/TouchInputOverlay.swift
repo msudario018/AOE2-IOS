@@ -170,21 +170,21 @@ public class TouchInputOverlay: UIView, UIGestureRecognizerDelegate {
     
     private func setupGestureRecognizers() {
         // 1. Two-finger single tap -> Right click (AoE2 Command / Move / Attack)
-        let twoFingerTap = UITapGestureRecognizer(target: self, selector: #selector(handleTwoFingerTap(_:)))
+        let twoFingerTap = UITapGestureRecognizer(target: self, action: #selector(handleTwoFingerTap(_:)))
         twoFingerTap.numberOfTouchesRequired = 2
         twoFingerTap.numberOfTapsRequired = 1
         twoFingerTap.delegate = self
         addGestureRecognizer(twoFingerTap)
         
         // 2. Two-finger pan -> Map scrolling (Camera pan)
-        let twoFingerPan = UIPanGestureRecognizer(target: self, selector: #selector(handleTwoFingerPan(_:)))
+        let twoFingerPan = UIPanGestureRecognizer(target: self, action: #selector(handleTwoFingerPan(_:)))
         twoFingerPan.minimumNumberOfTouches = 2
         twoFingerPan.maximumNumberOfTouches = 2
         twoFingerPan.delegate = self
         addGestureRecognizer(twoFingerPan)
         
         // 3. Pinch gesture -> Zoom / UI Scaling
-        let pinchGesture = UIPinchGestureRecognizer(target: self, selector: #selector(handlePinch(_:)))
+        let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(handlePinch(_:)))
         pinchGesture.delegate = self
         addGestureRecognizer(pinchGesture)
     }

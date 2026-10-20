@@ -1,4 +1,5 @@
 import Foundation
+import UIKit
 import os.log
 
 public enum LogLevel: String, CaseIterable {
@@ -73,7 +74,7 @@ public class Logger {
         lock.unlock()
         
         // Forward to native C crash reporter / file writer
-        AoE2_Log(level.rawValue, category.rawValue, "%s", message)
+        AoE2_LogMsg(level.rawValue, category.rawValue, message)
         
         DispatchQueue.main.async { [weak self] in
             self?.onNewEntry?(entry)

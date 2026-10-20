@@ -17,6 +17,9 @@ void CrashReporter_RecordBreadcrumb(const char* category, const char* message);
 /// Logs a formatted message directly to the persistent runtime log and console.
 void AoE2_Log(const char* level, const char* category, const char* format, ...) __attribute__((format(printf, 3, 4)));
 
+/// Non-variadic logging function for Swift interoperability.
+void AoE2_LogMsg(const char* level, const char* category, const char* message);
+
 #ifdef __cplusplus
 }
 #endif

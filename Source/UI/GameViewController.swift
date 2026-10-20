@@ -236,64 +236,64 @@ public class GameViewController: UIViewController, TouchInputDelegate, VirtualCo
     // MARK: - TouchInputDelegate
     
     public func mouseMoved(to point: CGPoint) {
-        EmulationBridgeWrapper.sharedInstance().sendMouseMoveToX(Int32(point.x), y: Int32(point.y))
+        EmulationBridgeWrapper.sharedInstance().sendMouseMove(x: Int32(point.x), y: Int32(point.y))
     }
     
     public func mouseDown(button: Int, at point: CGPoint) {
-        EmulationBridgeWrapper.sharedInstance().sendMouseButton(Int32(button), isDown: true)
+        EmulationBridgeWrapper.sharedInstance().sendMouseButton(button: Int32(button), isDown: true)
     }
     
     public func mouseUp(button: Int, at point: CGPoint) {
-        EmulationBridgeWrapper.sharedInstance().sendMouseButton(Int32(button), isDown: false)
+        EmulationBridgeWrapper.sharedInstance().sendMouseButton(button: Int32(button), isDown: false)
     }
     
     public func mapScroll(deltaX: CGFloat, deltaY: CGFloat) {
-        EmulationBridgeWrapper.sharedInstance().sendMouseScrollDeltaX(Int32(deltaX), deltaY: Int32(deltaY))
+        EmulationBridgeWrapper.sharedInstance().sendMouseScroll(deltaX: Int32(deltaX), deltaY: Int32(deltaY))
     }
     
     public func sendKeyEvent(keyCode: UInt16, isDown: Bool) {
-        EmulationBridgeWrapper.sharedInstance().sendKeyEvent(keyCode, isDown: isDown)
+        EmulationBridgeWrapper.sharedInstance().sendKeyEvent(scanCode: keyCode, isDown: isDown)
     }
     
     // MARK: - VirtualControlsDelegate
     
     public func didTapTownCenterHotkey() {
         Log.debug(.input, "HotKey Town Center (H)")
-        EmulationBridgeWrapper.sharedInstance().sendKeyEvent(0x23, isDown: true)
+        EmulationBridgeWrapper.sharedInstance().sendKeyEvent(scanCode: 0x23, isDown: true)
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-            EmulationBridgeWrapper.sharedInstance().sendKeyEvent(0x23, isDown: false)
+            EmulationBridgeWrapper.sharedInstance().sendKeyEvent(scanCode: 0x23, isDown: false)
         }
     }
     
     public func didTapIdleVillagerHotkey() {
         Log.debug(.input, "HotKey Idle Villager (.)")
-        EmulationBridgeWrapper.sharedInstance().sendKeyEvent(0x34, isDown: true)
+        EmulationBridgeWrapper.sharedInstance().sendKeyEvent(scanCode: 0x34, isDown: true)
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-            EmulationBridgeWrapper.sharedInstance().sendKeyEvent(0x34, isDown: false)
+            EmulationBridgeWrapper.sharedInstance().sendKeyEvent(scanCode: 0x34, isDown: false)
         }
     }
     
     public func didTapEscapeKey() {
         Log.debug(.input, "HotKey Escape (0x01)")
-        EmulationBridgeWrapper.sharedInstance().sendKeyEvent(0x01, isDown: true)
+        EmulationBridgeWrapper.sharedInstance().sendKeyEvent(scanCode: 0x01, isDown: true)
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-            EmulationBridgeWrapper.sharedInstance().sendKeyEvent(0x01, isDown: false)
+            EmulationBridgeWrapper.sharedInstance().sendKeyEvent(scanCode: 0x01, isDown: false)
         }
     }
     
     public func didTapPauseKey() {
         Log.debug(.input, "HotKey Pause / F3 (0x3D)")
-        EmulationBridgeWrapper.sharedInstance().sendKeyEvent(0x3D, isDown: true)
+        EmulationBridgeWrapper.sharedInstance().sendKeyEvent(scanCode: 0x3D, isDown: true)
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-            EmulationBridgeWrapper.sharedInstance().sendKeyEvent(0x3D, isDown: false)
+            EmulationBridgeWrapper.sharedInstance().sendKeyEvent(scanCode: 0x3D, isDown: false)
         }
     }
     
     public func didTapMenuKey() {
         Log.debug(.input, "HotKey Menu / F10 (0x44)")
-        EmulationBridgeWrapper.sharedInstance().sendKeyEvent(0x44, isDown: true)
+        EmulationBridgeWrapper.sharedInstance().sendKeyEvent(scanCode: 0x44, isDown: true)
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-            EmulationBridgeWrapper.sharedInstance().sendKeyEvent(0x44, isDown: false)
+            EmulationBridgeWrapper.sharedInstance().sendKeyEvent(scanCode: 0x44, isDown: false)
         }
     }
     
@@ -371,9 +371,9 @@ public class GameViewController: UIViewController, TouchInputDelegate, VirtualCo
     }
     
     private func sendKeyPulse(scanCode: UInt16) {
-        EmulationBridgeWrapper.sharedInstance().sendKeyEvent(scanCode, isDown: true)
+        EmulationBridgeWrapper.sharedInstance().sendKeyEvent(scanCode: scanCode, isDown: true)
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-            EmulationBridgeWrapper.sharedInstance().sendKeyEvent(scanCode, isDown: false)
+            EmulationBridgeWrapper.sharedInstance().sendKeyEvent(scanCode: scanCode, isDown: false)
         }
     }
 }
