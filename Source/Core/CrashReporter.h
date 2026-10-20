@@ -1,7 +1,12 @@
 #ifndef CrashReporter_h
 #define CrashReporter_h
 
+#if defined(__OBJC__)
 #import <Foundation/Foundation.h>
+#else
+#include <stdint.h>
+#include <stddef.h>
+#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -9,21 +14,22 @@ extern "C" {
 
 /// Installs POSIX signal handlers (SIGSEGV, SIGBUS, SIGILL, SIGABRT, SIGFPE)
 /// and NSUncaughtExceptionHandler to capture any native or managed crash.
-void CrashReporter_Install(const char* logDirectoryPath);
+void CrashReporter_Install(const char* _Nullable logDirectoryPath);
 
 /// Records a lightweight breadcrumb into the circular crash ring-buffer (signal-safe).
-void CrashReporter_RecordBreadcrumb(const char* category, const char* message);
+void CrashReporter_RecordBreadcrumb(const char* _Nullable category, const char* _Nullable message);
 
 /// Logs a formatted message directly to the persistent runtime log and console.
-void AoE2_Log(const char* level, const char* category, const char* format, ...) __attribute__((format(printf, 3, 4)));
+void AoE2_Log(const char* _Nullable level, const char* _Nullable category, const char* _Nullable format, ...) __attribute__((format(printf, 3, 4)));
 
 /// Non-variadic logging function for Swift interoperability.
-void AoE2_LogMsg(const char* level, const char* category, const char* message);
+void AoE2_LogMsg(const char* _Nullable level, const char* _Nullable category, const char* _Nullable message);
 
 #ifdef __cplusplus
 }
 #endif
 
+#if defined(__OBJC__)
 NS_ASSUME_NONNULL_BEGIN
 
 @interface CrashReporter : NSObject
@@ -37,5 +43,6 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 NS_ASSUME_NONNULL_END
+#endif
 
 #endif /* CrashReporter_h */
