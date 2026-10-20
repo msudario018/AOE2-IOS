@@ -9,10 +9,10 @@ on:
   workflow_dispatch:
     inputs:
       release_tag:
-        description: 'Release tag to publish (default: v1.0.0-ios)'
+        description: 'Release tag to publish (default: v1.0.1-ios)'
         required: false
         type: string
-        default: 'v1.0.0-ios'
+        default: 'v1.0.1-ios'
 
 permissions:
   contents: write
@@ -85,7 +85,7 @@ jobs:
             TAG="${{ github.ref_name }}"
           fi
           if [ "$TAG" = "main" ] || [ "$TAG" = "master" ] || [ -z "$TAG" ]; then
-            TAG="v1.0.0-ios"
+            TAG="v1.0.1-ios"
           fi
           echo "RELEASE_TAG=$TAG" >> "$GITHUB_ENV"
           echo "Release tag: $TAG"
@@ -98,17 +98,16 @@ jobs:
           cat << 'EOF' > /tmp/release_notes.md
           ### Age of Empires II (1999) — iOS Native Port (Unsigned IPA)
 
-          Turnkey compiled iOS IPA for **Age of Empires II (1999)** and **The Conquerors Expansion (2000)** (`EMPIRES2.EXE` / `age2_x1.exe`).
+          Turnkey compiled iOS IPA for **Age of Empires II (1999)**, **The Conquerors Expansion (2000)**, and **HD Edition (2013)**.
 
-          #### Features & Enhancements
-          - **120Hz ProMotion Metal Viewport**: Triple-buffered Metal pipeline with nearest-neighbor crisp retro scaling, bilinear filtering, and CRT scanline emulation.
+          #### What's New in v1.0.1:
+          - **Medieval Royal App Icon**: Integrated 1024x1024 high-resolution App Icon set into the native iOS asset catalog (`AppIcon.appiconset`).
+          - **HD Edition Directory Support**: `GameFileManager.swift` now automatically detects `AoK HD.exe` and HD edition resource tree (`resources/_common/dat`).
+          - **120Hz ProMotion Metal Viewport**: Triple-buffered Metal pipeline with nearest-neighbor crisp retro scaling, bilinear filtering, and CRT scanlines.
           - **Fallout1-CE Touch-to-Mouse Engine**: Direct tap-to-click, 2-finger right-click (move/attack), tap-and-drag marquee unit selection, 2-finger panning, and edge scrolling.
-          - **19.5:9 Small-Screen Tactical Flanks**: Native SwiftUI buttons hosted in the unused pillarbox margins on wide iPhone displays:
-            - **Left Flank**: Jump to Town Center (`H`), Cycle Idle Villagers (`.`), Cycle Military (`,`), Focus Unit (`Space`).
-            - **Right Flank**: Economic Build Menu (`B`), Military Build Menu (`V`), Repair (`R`), Garrison (`T`), Delete (`DEL`), Loupe Toggle.
+          - **19.5:9 Small-Screen Tactical Flanks**: Native SwiftUI buttons hosted in the unused pillarbox margins on wide iPhone displays.
           - **2.2x Command Bar Zoom Loupe**: Floating magnified Metal sub-texture above finger contact point when tapping the bottom HUD for accurate unit production.
           - **100% Feather Sideloading Ready**: Sideload with Feather, SideStore, AltStore, Sideloadly, or TrollStore with standard `get-task-allow` entitlements and zero JIT requirement.
-          - **Diagnostics & In-App Log Viewer**: Real-time console HUD, POSIX signal crash interception (`sigaltstack`), and iTunes / Apple Finder document sharing.
 
           #### Installation & Sideloading
           1. Download **`AoE2-unsigned.ipa`** or **`AoE2.ipa`** attached below.
