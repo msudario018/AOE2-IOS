@@ -64,6 +64,8 @@ void EmulationBridge_SendKeyEvent(uint16_t scanCode, bool isDown);
 
 // MARK: - Objective-C Wrapper Class for Swift Interoperability
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface EmulationBridgeWrapper : NSObject
 
 + (instancetype)sharedInstance;
@@ -80,9 +82,11 @@ void EmulationBridge_SendKeyEvent(uint16_t scanCode, bool isDown);
 - (void)sendMouseScrollDeltaX:(int)deltaX deltaY:(int)deltaY NS_SWIFT_NAME(sendMouseScroll(deltaX:deltaY:));
 - (void)sendKeyEvent:(uint16_t)scanCode isDown:(BOOL)isDown NS_SWIFT_NAME(sendKeyEvent(scanCode:isDown:));
 
-@property (nonatomic, copy, nullable) void (^onFramebufferAvailable)(int width, int height, int pitch, const void *pixels);
-@property (nonatomic, copy, nullable) void (^onAudioAvailable)(const int16_t *samples, int count);
+@property (nonatomic, copy, nullable) void (^onFramebufferAvailable)(int width, int height, int pitch, const void * _Nullable pixels);
+@property (nonatomic, copy, nullable) void (^onAudioAvailable)(const int16_t * _Nullable samples, int count);
 
 @end
+
+NS_ASSUME_NONNULL_END
 
 #endif /* EmulationBridge_h */
