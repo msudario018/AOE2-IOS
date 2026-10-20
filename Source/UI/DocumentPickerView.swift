@@ -68,11 +68,24 @@ public class DocumentPickerView: UIView, UIDocumentPickerDelegate {
         
         let pickButton = UIButton(type: .system)
         pickButton.setTitle("📂 Select Game Folder / ZIP", for: .normal)
-        pickButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .bold)
-        pickButton.setTitleColor(.white, for: .normal)
-        pickButton.backgroundColor = UIColor(red: 0.22, green: 0.45, blue: 0.85, alpha: 1.0)
+        if #available(iOS 15.0, *) {
+            var config = UIButton.Configuration.filled()
+            config.baseBackgroundColor = UIColor(red: 0.22, green: 0.45, blue: 0.85, alpha: 1.0)
+            config.baseForegroundColor = .white
+            config.contentInsets = NSDirectionalEdgeInsets(top: 12, leading: 24, bottom: 12, trailing: 24)
+            config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
+                var outgoing = incoming
+                outgoing.font = UIFont.systemFont(ofSize: 16, weight: .bold)
+                return outgoing
+            }
+            pickButton.configuration = config
+        } else {
+            pickButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .bold)
+            pickButton.setTitleColor(.white, for: .normal)
+            pickButton.backgroundColor = UIColor(red: 0.22, green: 0.45, blue: 0.85, alpha: 1.0)
+            pickButton.contentEdgeInsets = UIEdgeInsets(top: 12, left: 24, bottom: 12, right: 24)
+        }
         pickButton.layer.cornerRadius = 14.0
-        pickButton.contentEdgeInsets = UIEdgeInsets(top: 12, left: 24, bottom: 12, right: 24)
         pickButton.addTarget(self, action: #selector(didTapPickFolder), for: .touchUpInside)
         
         let refreshButton = UIButton(type: .system)

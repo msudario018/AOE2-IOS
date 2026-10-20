@@ -24,14 +24,18 @@ void AoE2_LogMsg(const char* level, const char* category, const char* message);
 }
 #endif
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface CrashReporter : NSObject
 
 + (void)install;
 + (void)recordBreadcrumbWithCategory:(NSString *)category message:(NSString *)message;
-+ (nonnull NSArray<NSString *> *)availableCrashReports;
++ (NSArray<NSString *> *)availableCrashReports;
 + (NSString * _Nullable)readLatestCrashReport;
 + (void)clearCrashReports;
 
 @end
+
+NS_ASSUME_NONNULL_END
 
 #endif /* CrashReporter_h */
