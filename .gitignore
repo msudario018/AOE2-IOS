@@ -1,0 +1,18 @@
+# Xcode & XcodeGen
+build/
+*.xcodeproj
+*.xcworkspace
+!project.yml
+xcuserdata/
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+*.pbxuser
+DerivedData/
+.DS_Store
+
+# Output IPAs and payloads
+*.ipa
+Payload/
+*.dSYM.zip
+*.dSYM

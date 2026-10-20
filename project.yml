@@ -1,0 +1,36 @@
+name: AoE2-iOS
+options:
+  bundleIdPrefix: com.retro
+  deploymentTarget:
+    iOS: "15.0"
+  xcodeVersion: "15.0"
+
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    TARGETED_DEVICE_FAMILY: "1,2"
+    CLANG_CXX_LANGUAGE_STANDARD: "c++17"
+    CLANG_CXX_LIBRARY: "libc++"
+    CLANG_ENABLE_OBJC_ARC: YES
+
+targets:
+  AoE2:
+    type: application
+    platform: iOS
+    sources:
+      - path: Source
+    settings:
+      base:
+        PRODUCT_NAME: "AoE2"
+        PRODUCT_BUNDLE_IDENTIFIER: "com.retro.aoe2ios"
+        INFOPLIST_FILE: "Source/App/Info.plist"
+        CODE_SIGN_ENTITLEMENTS: "Source/App/AoE2.entitlements"
+        SWIFT_OBJC_BRIDGING_HEADER: "Source/App/AoE2-Bridging-Header.h"
+        ENABLE_BITCODE: NO
+        ASSETCATALOG_COMPILER_APPICON_NAME: ""
+    dependencies:
+      - framework: Metal.framework
+      - framework: MetalKit.framework
+      - framework: QuartzCore.framework
+      - framework: UIKit.framework
+      - framework: AudioToolbox.framework

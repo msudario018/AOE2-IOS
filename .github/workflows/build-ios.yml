@@ -1,0 +1,131 @@
+name: Build AoE2 iOS IPA
+
+on:
+  push:
+    branches: [ main, master ]
+    tags: [ 'v*' ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: 'Release tag to publish (default: v1.0.0-ios)'
+        required: false
+        type: string
+        default: 'v1.0.0-ios'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build-ios:
+    name: Build AoE2 iOS IPA (arm64)
+    runs-on: macos-14
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Select Xcode 16
+        run: |
+          sudo xcode-select -s /Applications/Xcode_16.2.app/Contents/Developer 2>/dev/null || \
+          sudo xcode-select -s /Applications/Xcode_16.1.app/Contents/Developer 2>/dev/null || \
+          sudo xcode-select -s /Applications/Xcode_16.0.app/Contents/Developer 2>/dev/null || \
+          sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
+          xcodebuild -version
+
+      - name: Install XcodeGen
+        run: |
+          brew install xcodegen
+          xcodegen --version
+
+      - name: Generate Xcode Project
+        run: |
+          xcodegen generate
+
+      - name: Build AoE2 iOS Archive
+        run: |
+          mkdir -p build
+          xcodebuild archive \
+            -project AoE2-iOS.xcodeproj \
+            -scheme AoE2 \
+            -configuration Release \
+            -destination "generic/platform=iOS" \
+            -archivePath build/AoE2.xcarchive \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO
+
+      - name: Package Unsigned IPA
+        run: |
+          mkdir -p build/Payload
+          cp -R build/AoE2.xcarchive/Products/Applications/AoE2.app build/Payload/
+          cd build
+          zip -qr AoE2-unsigned.ipa Payload
+          cp AoE2-unsigned.ipa AoE2.ipa
+          ls -lh AoE2-unsigned.ipa AoE2.ipa
+
+      - name: Upload IPA Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: AoE2-iOS-unsigned-ipa
+          path: build/AoE2-unsigned.ipa
+          retention-days: 14
+
+      - name: Determine Release Tag
+        if: startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || github.event_name == 'workflow_dispatch'
+        run: |
+          TAG="${{ inputs.release_tag }}"
+          if [ -z "$TAG" ]; then
+            TAG="${{ github.ref_name }}"
+          fi
+          if [ "$TAG" = "main" ] || [ "$TAG" = "master" ] || [ -z "$TAG" ]; then
+            TAG="v1.0.0-ios"
+          fi
+          echo "RELEASE_TAG=$TAG" >> "$GITHUB_ENV"
+          echo "Release tag: $TAG"
+
+      - name: Publish GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || github.event_name == 'workflow_dispatch'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cat << 'EOF' > /tmp/release_notes.md
+          ### Age of Empires II (1999) — iOS Native Port (Unsigned IPA)
+
+          Turnkey compiled iOS IPA for **Age of Empires II (1999)** and **The Conquerors Expansion (2000)** (`EMPIRES2.EXE` / `age2_x1.exe`).
+
+          #### Features & Enhancements
+          - **120Hz ProMotion Metal Viewport**: Triple-buffered Metal pipeline with nearest-neighbor crisp retro scaling, bilinear filtering, and CRT scanline emulation.
+          - **Fallout1-CE Touch-to-Mouse Engine**: Direct tap-to-click, 2-finger right-click (move/attack), tap-and-drag marquee unit selection, 2-finger panning, and edge scrolling.
+          - **19.5:9 Small-Screen Tactical Flanks**: Native SwiftUI buttons hosted in the unused pillarbox margins on wide iPhone displays:
+            - **Left Flank**: Jump to Town Center (`H`), Cycle Idle Villagers (`.`), Cycle Military (`,`), Focus Unit (`Space`).
+            - **Right Flank**: Economic Build Menu (`B`), Military Build Menu (`V`), Repair (`R`), Garrison (`T`), Delete (`DEL`), Loupe Toggle.
+          - **2.2x Command Bar Zoom Loupe**: Floating magnified Metal sub-texture above finger contact point when tapping the bottom HUD for accurate unit production.
+          - **100% Feather Sideloading Ready**: Sideload with Feather, SideStore, AltStore, Sideloadly, or TrollStore with standard `get-task-allow` entitlements and zero JIT requirement.
+          - **Diagnostics & In-App Log Viewer**: Real-time console HUD, POSIX signal crash interception (`sigaltstack`), and iTunes / Apple Finder document sharing.
+
+          #### Installation & Sideloading
+          1. Download **`AoE2-unsigned.ipa`** or **`AoE2.ipa`** attached below.
+          2. Sideload onto your iPhone or iPad using **Feather**, **SideStore**, **AltStore**, **Sideloadly**, or **TrollStore**.
+          3. Connect device to your PC/Mac, open **Files / iTunes File Sharing**, and drop your original PC **Age of Empires II** game folder into the app's `Documents` directory.
+          4. Launch the app and play!
+          EOF
+
+          echo "Publishing release $RELEASE_TAG..."
+          if gh release view "$RELEASE_TAG" &>/dev/null; then
+            echo "Release $RELEASE_TAG exists. Updating assets..."
+            gh release upload "$RELEASE_TAG" build/AoE2-unsigned.ipa build/AoE2.ipa --clobber
+            gh release edit "$RELEASE_TAG" --notes-file /tmp/release_notes.md
+          else
+            echo "Creating release $RELEASE_TAG..."
+            gh release create "$RELEASE_TAG" build/AoE2-unsigned.ipa build/AoE2.ipa \
+              --title "Age of Empires II iOS $RELEASE_TAG" \
+              --notes-file /tmp/release_notes.md \
+              --target "${{ github.sha }}"
+          fi
