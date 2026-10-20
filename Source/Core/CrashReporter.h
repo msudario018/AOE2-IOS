@@ -28,7 +28,7 @@ void AoE2_LogMsg(const char* level, const char* category, const char* message);
 
 + (void)install;
 + (void)recordBreadcrumbWithCategory:(NSString *)category message:(NSString *)message;
-+ (NSArray<NSString *> *)availableCrashReports;
++ (nonnull NSArray<NSString *> *)availableCrashReports;
 + (NSString * _Nullable)readLatestCrashReport;
 + (void)clearCrashReports;
 

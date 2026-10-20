@@ -153,7 +153,7 @@ public class GameViewController: UIViewController, TouchInputDelegate, VirtualCo
     // MARK: - Crash Check
     
     private func checkForPreviousCrashLogs() {
-        let crashReports = CrashReporter.availableCrashReports()
+        let crashReports = CrashReporter.availableCrashReports() ?? []
         if !crashReports.isEmpty {
             Log.warn(.general, "Detected \(crashReports.count) previous crash report(s) on disk.")
             
